@@ -8,10 +8,11 @@ from langchain.tools.render import render_text_description
 # from langchain.tools import Tool
 # from langchain.agents import AgentExecutor
 from dotenv import load_dotenv
-from mir_tool import MirTool
-import os
+from mir_tool import MusicInformationRetrievalTool
+from ffmpeg_tool import FfmpegTool
+# import os
 
-os.environ["LANGCHAIN_TRACING"] = "true"
+# os.environ["LANGCHAIN_TRACING"] = "true"
 
 
 load_dotenv()
@@ -19,7 +20,8 @@ load_dotenv()
 def main():
     llm = OpenAI(temperature=0)
     tools = load_tools(["serpapi", "llm-math"], llm=llm)
-    tools.append(MirTool())
+    tools.append(MusicInformationRetrievalTool())
+    tools.append(FfmpegTool())
 
     prompt = hub.pull("hwchase17/react")
     prompt = prompt.partial(
@@ -43,7 +45,7 @@ def main():
     )
     agent_executor.invoke(
         {
-            "input": "Who is Leo DiCaprio's girlfriend? What is her current age raised to the 0.43 power?"
+            "input": "can you reverse the audio file located at ./input.wav and output it as a mp3 file?",
         }
     )
 

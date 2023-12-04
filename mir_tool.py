@@ -1,5 +1,5 @@
 
-from typing import Optional, Type
+from typing import Optional 
 
 from langchain.callbacks.manager import (
     CallbackManagerForToolRun,
@@ -7,8 +7,8 @@ from langchain.callbacks.manager import (
 )
 from langchain.tools import BaseTool 
 
-class MirTool(BaseTool):
-    name = "mir_tool"
+class MusicInformationRetrievalTool(BaseTool):
+    name = "MusicInformationRetrieval"
     description = "useful for when you need to analyze audio or music"
 
     def _run(
@@ -33,4 +33,4 @@ class MirTool(BaseTool):
             run_manager: Optional[AsyncCallbackManagerForToolRun] = None
         ) -> str:
             """Use the tool asynchronously."""
-            raise NotImplementedError("mir_tool does not support async")
+            raise NotImplementedError("MusicInformationRetrievalTool does not support async")
