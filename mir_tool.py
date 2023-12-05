@@ -17,15 +17,7 @@ class MusicInformationRetrievalTool(BaseTool):
         run_manager: Optional[CallbackManagerForToolRun] = None
     ) -> str:
         """Use the tool."""
-        return {
-            "output": "This is a test",
-            "intermediate_steps": [
-                "This is a test",
-                "This is a test",
-                "This is a test",
-                "This is a test",
-            ],
-        }
+        return "this is a test"
 
     async def _arun(
             self, 

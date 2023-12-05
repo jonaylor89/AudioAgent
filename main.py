@@ -10,6 +10,7 @@ from langchain.tools.render import render_text_description
 from dotenv import load_dotenv
 from mir_tool import MusicInformationRetrievalTool
 from ffmpeg_tool import FfmpegTool
+from reverb_tool import ReverbTool
 # import os
 
 # os.environ["LANGCHAIN_TRACING"] = "true"
@@ -22,30 +23,35 @@ def main():
     tools = load_tools(["serpapi", "llm-math"], llm=llm)
     tools.append(MusicInformationRetrievalTool())
     tools.append(FfmpegTool())
+    tools.append(ReverbTool)
 
     prompt = hub.pull("hwchase17/react")
     prompt = prompt.partial(
         tools=render_text_description(tools),
         tool_names=", ".join([t.name for t in tools]),
     )
-    llm_with_stop = llm.bind(stop=["\nObservation"])
-    agent = (
-        {
-            "input": lambda x: x["input"],
-            "agent_scratchpad": lambda x: format_log_to_str(x["intermediate_steps"]),
-        }
-        | prompt
-        | llm_with_stop
-        | ReActSingleInputOutputParser()
-    )
+    # llm_with_stop = llm.bind(stop=["\nObservation"])
+    # agent = (
+    #     {
+    #         "input": lambda x: x["input"],
+    #         "agent_scratchpad": lambda x: format_log_to_str(x["intermediate_steps"]),
+    #     }
+    #     | prompt
+    #     | llm_with_stop
+    #     | ReActSingleInputOutputParser()
+    # )
 
     # agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
     agent_executor = initialize_agent(
-        tools, llm, agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, verbose=True
+        tools, 
+        llm, 
+        agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION, 
+        verbose=True,
+        handle_parsing_errors=True, 
     )
     agent_executor.invoke(
         {
-            "input": "can you reverse the audio file located at ./input.wav and output it as a mp3 file?",
+            "input": "can you clip the audio file located at input.wav to be 5 seconds, save it as an mp3 file?",
         }
     )
 
