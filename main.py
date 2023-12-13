@@ -23,7 +23,7 @@ def main():
     tools = load_tools(["serpapi", "llm-math"], llm=llm)
     tools.append(MusicInformationRetrievalTool())
     tools.append(FfmpegTool())
-    tools.append(ReverbTool)
+    # tools.append(ReverbTool)
 
     prompt = hub.pull("hwchase17/react")
     prompt = prompt.partial(
