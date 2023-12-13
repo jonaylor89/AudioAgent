@@ -2,26 +2,23 @@
 from langchain.agents import AgentType, initialize_agent, load_tools
 from langchain.llms import OpenAI
 from langchain import hub
-from langchain.agents.format_scratchpad import format_log_to_str
-from langchain.agents.output_parsers import ReActSingleInputOutputParser
+# from langchain.agents.format_scratchpad import format_log_to_str
+# from langchain.agents.output_parsers import ReActSingleInputOutputParser
 from langchain.tools.render import render_text_description
 # from langchain.tools import Tool
 # from langchain.agents import AgentExecutor
 from dotenv import load_dotenv
-from mir_tool import MusicInformationRetrievalTool
-from ffmpeg_tool import FfmpegTool
-from reverb_tool import ReverbTool
+# from tools.mir_tool import MusicInformationRetrievalTool
+from tools.ffmpeg_tool import FfmpegTool
+# from tools.reverb_tool import ReverbTool
 # import os
 
 # os.environ["LANGCHAIN_TRACING"] = "true"
 
-
-load_dotenv()
-
 def main():
     llm = OpenAI(temperature=0)
     tools = load_tools(["serpapi", "llm-math"], llm=llm)
-    tools.append(MusicInformationRetrievalTool())
+    # tools.append(MusicInformationRetrievalTool())
     tools.append(FfmpegTool())
     # tools.append(ReverbTool)
 
@@ -57,4 +54,5 @@ def main():
 
 
 if __name__ == '__main__':
+    load_dotenv()
     main()
