@@ -1,27 +1,32 @@
-[tool.poetry]
+[tool.pdm.build]
+includes = []
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+
+[project]
+authors = [
+    {name = "Johannes Naylor", email = "jonaylor89@gmail.com"},
+]
+requires-python = "<3.12,>=3.9"
+dependencies = [
+    "langchain<1.0.0,>=0.0.345",
+    "openai<2.0.0,>=1.3.7",
+    "python-dotenv<2.0.0,>=1.0.0",
+    "google-search-results<3.0.0,>=2.4.2",
+    "numexpr<3.0.0,>=2.8.7",
+    "langchainhub<1.0.0,>=0.1.14",
+    "pydantic<3.0.0,>=2.5.2",
+    "pedalboard<1.0.0,>=0.8.6",
+    "numpy<2.0.0,>=1.26.2",
+    "soundfile<1.0.0,>=0.12.1",
+    "tensorflow<3.0.0,>=2.15.0",
+    "tqdm<5.0.0,>=4.66.1",
+    "jupyter<2.0.0,>=1.0.0",
+]
 name = "music-analysis-agent"
 version = "0.1.0"
 description = ""
-authors = ["Johannes Naylor <johannes@tapped.ai>"]
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = ">=3.9,<3.12"
-langchain = "^0.0.345"
-openai = "^1.3.7"
-python-dotenv = "^1.0.0"
-google-search-results = "^2.4.2"
-numexpr = "^2.8.7"
-langchainhub = "^0.1.14"
-pydantic = "^2.5.2"
-pedalboard = "^0.8.6"
-numpy = "^1.26.2"
-soundfile = "^0.12.1"
-tensorflow = "^2.15.0"
-tqdm = "^4.66.1"
-jupyter = "^1.0.0"
-
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
