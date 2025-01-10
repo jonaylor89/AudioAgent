@@ -1,12 +1,13 @@
+###############################################################################
+# FFmpeg Audio Processing Agent Tutorial
+#
+# This script demonstrates how to create an AI agent specialized in audio processing
+# using FFmpeg. It combines LangChain, Anthropic's Claude, and custom tools to
+# create an interactive audio engineering assistant.
+###############################################################################
 
+# Import required libraries
 from dotenv import load_dotenv
-# from langchain.agents import AgentType, initialize_agent
-# from langchain import hub
-# from langchain.tools.render import render_text_description
-# from tools.ffmpeg_tool import FfmpegTool
-
-# from langchain_community.agent_toolkits.load_tools import load_tools
-# from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain_community.tools.tavily_search import TavilySearchResults
 from langchain_core.messages import HumanMessage
@@ -14,21 +15,33 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 
 from tools.ffmpeg_tool import FfmpegTool
+
+# Load environment variables (e.g. API keys)
 load_dotenv()
 
 
 def main():
-    # Create the agent
+    ###########################################################################
+    # Agent Setup
+    ###########################################################################
+
+    # Initialize memory to maintain conversation state
     memory = MemorySaver()
+
+    # Configure the Claude 3 Sonnet model as our main LLM
     model = ChatAnthropic(
         model_name="claude-3-sonnet-20240229",
-        timeout=60,
-        stop=None
+        timeout=60,  # Maximum time to wait for model response
+        stop=None    # No custom stop tokens
     )
-    # model = ChatOpenAI(name="gpt-4o-mini")
+
+    # Initialize tools that the agent can use:
+    # - TavilySearchResults: For web searches (limited to 2 results for conciseness)
+    # - FfmpegTool: Custom tool for audio manipulation
     search = TavilySearchResults(max_results=2)
     tools = [search, FfmpegTool()]
 
+    # Define the agent's core behavior and expertise through a prompt
     prompt = """You are an expert audio engineer specializing in FFmpeg operations.
     When asked to perform audio operations:
     1. Use the FfmpegTool for any audio file manipulations
@@ -38,16 +51,27 @@ def main():
 
     Remember to check the output of commands and handle any errors appropriately."""
 
+    # Create the reactive agent with our model, tools, and configuration
     agent_executor = create_react_agent(model, tools, checkpointer=memory, state_modifier=prompt)
 
-    # Use the agent
+    ###########################################################################
+    # Agent Interaction Examples
+    ###########################################################################
+
+    # Configuration for maintaining conversation thread
     config = {"configurable": {"thread_id": "abc123"}}
+
+    # Example 1: Basic conversation to test agent responsiveness
+    # The agent processes a simple greeting to establish rapport
     for chunk in agent_executor.stream(
         {"messages": [HumanMessage(content="hi im bob! and i live in sf")]}, config
     ):
         print(chunk)
         print("----")
 
+    # Example 2: Audio processing task
+    # Demonstrate the agent's ability to handle an FFmpeg command request
+    # This example asks the agent to clip and convert an audio file
     for chunk in agent_executor.stream(
         {"messages": [HumanMessage(content="can you clip the audio file located at ./samples/helicopter.wav to be 5 seconds, save it as an mp3 file?")]},
         config,
@@ -56,5 +80,6 @@ def main():
         print("----")
 
 
+# Standard Python idiom for running the main function
 if __name__ == '__main__':
     main()
