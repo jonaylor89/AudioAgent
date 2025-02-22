@@ -1,5 +1,8 @@
 # Simple AI Digital Audio Workstation (DAW)
 
+![image](https://github.com/user-attachments/assets/a20b8843-df58-4c12-bf4f-0da51468efc2)
+
+
 This project demonstrates a basic AI-driven approach to music creation, exploring how AI agents can assist in generating musical ideas and compositions.  It's inspired by the blog post [Build a Simple AI DAW](https://blog.jonaylor.com/build-a-simple-ai-daw).
 
 ## Description
